@@ -162,7 +162,9 @@ public class EmployeeDAOImpl implements EmployeeDAO {
         // и через метод get получаем объект
         // В параметре метода get нужно указать объект какого класса нам нужен
         // и его id
-        return HibernateSessionFactoryUtil.getSessionFactory().openSession().get(Employee.class, id);
+        try (Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession()){
+            return session.get(Employee.class, id);
+        }
     }
 
     @Override
@@ -170,6 +172,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
         ArrayList<Employee> employees = (ArrayList<Employee>)  HibernateSessionFactoryUtil
                 .getSessionFactory().openSession().createQuery("From Employee").list();
         return employees;
+
     }
 
     @Override
